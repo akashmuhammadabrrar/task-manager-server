@@ -130,6 +130,18 @@ app.delete("/tasks/:id", async (req, res) => {
   const result = await taskCollection.deleteOne(query);
   res.send(result);
 });
+// update the task
+app.put("/tasks/:id", async (req, res) => {
+  const id = req.params.id;
+  const updatedTask = req.body;
+
+  // Remove the _id field from the update payload
+  delete updatedTask._id;
+
+  const query = { _id: new ObjectId(id) };
+  const result = await taskCollection.updateOne(query, { $set: updatedTask });
+  res.send(result);
+});
 
 // Root Route
 app.get("/", (req, res) => {
